@@ -14,13 +14,6 @@ class InstanceLoader:
             raw_attributes = splitted_content[0]
             raw_vertices = splitted_content[1]
 
-            # print("---")
-            # # print(raw_vertices)
-            # print("--")
-            # self._get_vertices(raw_vertices)
-
-            # return
-
             instance = Instance(
                 name=self._get_name(raw_attributes),
                 type=self._get_type(raw_attributes),
@@ -88,7 +81,6 @@ class InstanceLoader:
                 y=float(splitted_line[2]),
             )
             vertices.append(vertex)
-            # print(splitted_line)
         return vertices
 
 

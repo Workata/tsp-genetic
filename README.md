@@ -1,5 +1,13 @@
 # tsp-genetic
 
+## Development
+
+### Running project
+
+```py
+python3 ./src/main.py
+```
+
 ## Selected TSP Instances
 
 |Instance|  Number of Cities | Optimal Solution  |
