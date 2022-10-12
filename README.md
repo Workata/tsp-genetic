@@ -14,3 +14,22 @@
 | gr666 | 666  | 294358  |
 | nrw1379 | 1379  | 56638  |
 | pr2392 | 2392  | 378032  |
+
+
+
+### Instance format example
+```
+NAME: ali535
+TYPE: TSP
+COMMENT: 535 Airports around the globe (Padberg/Rinaldi)
+DIMENSION: 535
+EDGE_WEIGHT_TYPE: GEO
+DISPLAY_DATA_TYPE: COORD_DISPLAY
+NODE_COORD_SECTION
+1  36.49  7.49
+2  57.06  9.51
+...
+534  51.33  0.14
+535  24.58  91.53
+EOF
+```
