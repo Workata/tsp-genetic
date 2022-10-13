@@ -5,7 +5,7 @@
 *.csv
 
 # real config
-conifg.json
+config.json
 
 
 
