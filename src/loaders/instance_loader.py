@@ -48,9 +48,9 @@ class InstanceLoader:
         except AttributeError:
             return None
 
-    def _get_dimension(self, raw_attributes: str) -> t.Optional[str]:
+    def _get_dimension(self, raw_attributes: str) -> int:
         try:
-            return self._find_attribute_value('DIMENSION', raw_attributes)
+            return int(self._find_attribute_value('DIMENSION', raw_attributes))
         except AttributeError:
             return None
 
