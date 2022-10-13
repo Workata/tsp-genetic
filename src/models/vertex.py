@@ -2,6 +2,6 @@ import typing as t
 
 
 class Vertex(t.NamedTuple):
-    vertex_number: int
+    number: int
     x: float
     y: float

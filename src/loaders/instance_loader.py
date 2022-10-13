@@ -76,7 +76,7 @@ class InstanceLoader:
             splitted_line = line.split(' ')
             splitted_line = list(filter(None, splitted_line))
             vertex = Vertex(
-                vertex_number=int(splitted_line[0]),
+                number=int(splitted_line[0]),
                 x=float(splitted_line[1]),
                 y=float(splitted_line[2]),
             )

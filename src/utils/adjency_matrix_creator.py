@@ -27,8 +27,8 @@ class AdjencyMatrixCreator:
 
                 distance = self._calculate_distance_between_vertices(vertex_a, vertex_b)
                 # symmetric adjacency matrix
-                matrix[vertex_a.vertex_number][vertex_b.vertex_number] = distance
-                matrix[vertex_b.vertex_number][vertex_a.vertex_number] = distance
+                matrix[vertex_a.number][vertex_b.number] = distance
+                matrix[vertex_b.number][vertex_a.number] = distance
 
         return matrix
 
