@@ -4,6 +4,14 @@
 
 ### Running project
 
+* Create/copy config file:
+```sh
+cp config_example.json config.json
+```
+
+* Change config settings if needed
+
+* Run program
 ```py
 python3 ./src/main.py
 ```

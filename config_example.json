@@ -1,0 +1,10 @@
+{
+  "algorithm": "greedy",
+  "instance_file_name": "berlin11_modified.tsp",
+  "output_file_name": "test_1.csv",
+  "repetitions": 5,
+
+  "greedy": {},
+  "random": {},
+  "genetic": {}
+}

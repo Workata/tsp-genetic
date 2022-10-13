@@ -1,6 +1,11 @@
 # instances
 *.tsp
 
+# output
+*.csv
+
+# real config
+conifg.json
 
 
 
