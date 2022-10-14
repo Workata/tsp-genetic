@@ -2,7 +2,7 @@
 
 ## Development
 
-### Running project
+### Setup project
 
 * Create/copy config file:
 ```sh
@@ -10,6 +10,21 @@ cp config_example.json config.json
 ```
 
 * Change config settings if needed
+
+* Create venv
+```sh
+python3 -m venv ./venv
+```
+
+* Install libs
+```sh
+pip install -r ./requirements/dev.txt
+```
+
+* Activate venv
+```sh
+. ./venv/bin/activate
+```
 
 * Run program
 ```py
