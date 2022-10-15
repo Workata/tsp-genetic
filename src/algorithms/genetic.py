@@ -39,8 +39,8 @@ class GeneticTspSolver(BaseTspSolver):
         while not self._stop_condition_achieved(current_num_of_gen):
             self._selection_tournament(population, evaluation)
             self._crossover()
-            self._mutation_swap()
-            self._evaluation(population)
+            population = self._mutation_swap(population)
+            evaluation = self._evaluation(population)
             current_num_of_gen += 1
 
         return total_cost, path
