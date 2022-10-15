@@ -99,8 +99,15 @@ class GeneticTspSolver(BaseTspSolver):
     def _crossover(self):
         pass
 
-    def _mutation_swap(self):
-        pass
+    def _mutation_swap(self, to_mutate: t.List[Vertex]) -> t.List[Vertex]:
+        random_ints: t.List[int] = random.sample(range(0, len(to_mutate) - 1), 2)
+        to_mutate[random_ints[0]], to_mutate[random_ints[1]] = to_mutate[random_ints[1]], to_mutate[random_ints[0]]
+        return to_mutate
 
-    def _mutation_inversion(self):
-        pass
+    def _mutation_inversion(self, to_mutate: t.List[Vertex]) -> t.List[Vertex]:
+        random_ints: t.List[int] = random.sample(range(0, len(to_mutate)), 2)
+        if random_ints[0] > random_ints[1]:
+            to_mutate[random_ints[1]:random_ints[0]] = to_mutate[random_ints[1]:random_ints[0]][::-1]
+        else:
+            to_mutate[random_ints[0]:random_ints[1]] = to_mutate[random_ints[0]:random_ints[1]][::-1]
+        return to_mutate
