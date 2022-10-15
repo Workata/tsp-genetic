@@ -8,8 +8,12 @@
 # print(instance.vertices[4])
 
 from algorithms import GreedyTspSolver
+from algorithms import RandomTspSolver
 
+print("Greedy TSP problem solver:")
+greedy_solver = GreedyTspSolver()
+greedy_solver.solve()
 
-solver = GreedyTspSolver()
-solver.solve()
-
+print("Randomized TSP problem solver:")
+random_solver = RandomTspSolver()
+random_solver.solve()
