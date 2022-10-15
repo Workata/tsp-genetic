@@ -17,8 +17,8 @@ class GeneticTspSolver(BaseTspSolver):
         - tournament
         - roulette
     """
-    POPULATION_SIZE = 5   # default 100
-    TOURNAMENT_SIZE = 1   # default 5
+    POPULATION_SIZE = 5  # default 100
+    TOURNAMENT_SIZE = 1  # default 5
     NUMBER_OF_TOURNAMENTS = 5
     MAX_NUM_OF_GEN = 100  # default 100
 
@@ -32,7 +32,7 @@ class GeneticTspSolver(BaseTspSolver):
         instance = self._instance_loader.load("./instances/berlin11_modified.tsp")
         current_num_of_gen = 0
 
-        population = self._initialization(instance)     # init generation
+        population = self._initialization(instance)  # init generation
         # print(population)
         evaluation = self._evaluation(population)
         # print(evaluation)
@@ -46,18 +46,16 @@ class GeneticTspSolver(BaseTspSolver):
 
         return total_cost, path
 
-
-
     def _stop_condition_achieved(self, current_num_of_gen) -> bool:
         # TODO maybe add other stop conditions
         if current_num_of_gen >= self.MAX_NUM_OF_GEN:
             return True
         return False
 
-    def _initialization(self, instance: Instance) -> t.List[ t.List[Vertex] ]:
+    def _initialization(self, instance: Instance) -> t.List[t.List[Vertex]]:
         init_population = []
         for _ in range(0, self.POPULATION_SIZE):
-            specimen = self._generate_random_route(instance, add_last_vertex = False)
+            specimen = self._generate_random_route(instance)
             init_population.append(specimen)
         return init_population
 
@@ -79,7 +77,7 @@ class GeneticTspSolver(BaseTspSolver):
         ratings = []
         for specimen in population:
             rating = round(
-                1 / self._calculate_total_distance(specimen, route_with_last_vertex = False),
+                1 / self._calculate_total_distance(specimen),
                 self.EVALUATION_DECIMAL_PRECISION
             )
             ratings.append(rating)
