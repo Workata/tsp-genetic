@@ -25,8 +25,10 @@ class BaseTspSolver(ABC):
             new_route.append(new_route[0])
         return new_route
 
-    def _calculate_total_distance(self, route: t.List[Vertex]) -> int:
+    def _calculate_total_distance(self, route: t.List[Vertex], route_with_last_vertex: bool = True) -> int:
         total_distance: float = 0.0
         for i in range(len(route) - 1):
             total_distance += self._calculator.calculate_distance_between_vertices(route[i], route[i+1])
+        if not route_with_last_vertex:
+            total_distance += self._calculator.calculate_distance_between_vertices(route[-1], route[0])
         return round(total_distance, 2)

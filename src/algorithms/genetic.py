@@ -19,6 +19,7 @@ class GeneticTspSolver(BaseTspSolver):
     """
     POPULATION_SIZE = 5   # default 100
     TOURNAMENT_SIZE = 1   # default 5
+    NUMBER_OF_TOURNAMENTS = 5
     MAX_NUM_OF_GEN = 100  # default 100
 
     EVALUATION_DECIMAL_PRECISION = 6
@@ -77,7 +78,10 @@ class GeneticTspSolver(BaseTspSolver):
         """
         ratings = []
         for specimen in population:
-            rating = round(1 / self._calculate_total_distance(specimen), self.EVALUATION_DECIMAL_PRECISION)
+            rating = round(
+                1 / self._calculate_total_distance(specimen, route_with_last_vertex = False),
+                self.EVALUATION_DECIMAL_PRECISION
+            )
             ratings.append(rating)
         return ratings
 
