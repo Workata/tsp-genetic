@@ -1,14 +1,5 @@
-# from loaders import InstanceLoader
+from algorithms import GreedyTspSolver, RandomTspSolver
 
-# loader = InstanceLoader()
-
-# instance = loader.load("./instances/ali535.tsp")
-
-# print(instance.dimension)
-# print(instance.vertices[4])
-
-from algorithms import GreedyTspSolver
-from algorithms import RandomTspSolver
 
 print("Greedy TSP problem solver:")
 greedy_solver = GreedyTspSolver()

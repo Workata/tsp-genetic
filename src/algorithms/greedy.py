@@ -1,8 +1,10 @@
-from loaders import InstanceLoader
 import numpy as np
-from utils import AdjencyMatrixCreator
+import typing as t
+from models import Vertex
+from .base import BaseTspSolver
 
-class GreedyTspSolver():
+
+class GreedyTspSolver(BaseTspSolver):
     """
     WIP
     TODO Add BaseSolver - instance loader + adj matrix creator
@@ -10,12 +12,10 @@ class GreedyTspSolver():
     TODO decorators - time, csv output?
     """
 
-    def solve(self,):
-        loader = InstanceLoader()
+    def solve(self) -> t.Tuple[int, t.List[Vertex]]:
         # berlin11_modified.tsp gr666.tsp
-        instance = loader.load("./instances/berlin11_modified.tsp")
-        matrix_creator = AdjencyMatrixCreator()
-        adj_matrix = matrix_creator.create(instance)
+        instance = self._instance_loader.load("./instances/berlin11_modified.tsp")
+        adj_matrix = self._matrix_creator.create(instance)
 
 
         starting_vertex = instance.vertices[0]
