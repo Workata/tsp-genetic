@@ -2,13 +2,13 @@ import numpy as np
 import typing as t
 from models import Vertex
 from .base import BaseTspSolver
+import time
 
 
 class GreedyTspSolver(BaseTspSolver):
     """
     WIP
-    TODO Add BaseSolver - instance loader + adj matrix creator
-    TODO Check if this is ok
+    TODO Improve SPEED! !!
     TODO decorators - time, csv output?
     """
 
@@ -17,6 +17,8 @@ class GreedyTspSolver(BaseTspSolver):
 
         min_distance: float = np.Inf
         min_route: t.List[Vertex] = None
+
+        start = time.time_ns()
 
         for starting_vertex in self._instance.vertices:
             visited_vertices = [starting_vertex]
@@ -54,5 +56,10 @@ class GreedyTspSolver(BaseTspSolver):
                 min_route = visited_vertices
 
         print((min_distance, min_route))
+        end = time.time_ns()
+        fin_time = (end-start) / 1000000000
+        print("CZASSS")
+        print(fin_time)
+        # print(min_distance)
 
         return min_distance, min_route
