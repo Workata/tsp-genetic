@@ -2,15 +2,18 @@ from algorithms import GreedyTspSolver, RandomTspSolver, GeneticTspSolver
 from loaders import ConfigLoader, InstanceLoader
 from utils import Calculator, AdjencyMatrixCreator
 
-# TODO csv output
 
 CONFIG_FILE_PATH = './config.json'
 
 config = ConfigLoader.load(CONFIG_FILE_PATH)
-
 instance_loader = InstanceLoader()
-instance = instance_loader.load(config.get('instance_file_path'))
 
+algorithm = config.get('algorithm')
+repetitions = config.get('repetitions')
+instance_file_path = config.get('instance_file_path')
+
+# * create instance and adjency matrix
+instance = instance_loader.load(instance_file_path)
 adj_matrix = AdjencyMatrixCreator(calculator=Calculator()).create(instance)
 
 
@@ -20,12 +23,10 @@ SOLVERS = {
     "random": RandomTspSolver(instance, adj_matrix, solver_config=config.get('random'))
 }
 
-algorithm = config.get('algorithm')
-repetitions = config.get('repetitions')
-
 solver = SOLVERS[algorithm]
 
 
+# * run solver
 for i in range(1, repetitions+1):
     print(f"\n[INFO] ------------------- ITERATION {i} START -----------------")
     print(f"[INFO] TSP problem solver ({algorithm})")
