@@ -1,8 +1,8 @@
 {
-  "algorithm": "genetic",
-  "instance_file_path": "./instances/berlin52.tsp",
-  "output_file_path": "./output/test_1.csv",
-  "repetitions": 5,
+  "algorithm": "random",
+  "instance_file_path": "./instances/kroA100.tsp",
+  "output_file_path": "./output/test_random_1000000.csv",
+  "repetitions": 3,
 
   "genetic": {
     "population_size": 100,
@@ -18,6 +18,9 @@
     "selection": "tournament"
   },
 
-  "greedy": {},
-  "random": {}
+  "random": {
+    "random_repeat": 1000000
+  },
+
+  "greedy": {}
 }
