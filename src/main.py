@@ -1,14 +1,23 @@
 from algorithms import GreedyTspSolver, RandomTspSolver, GeneticTspSolver
+from loaders import ConfigLoader, InstanceLoader
 
 
-print("Greedy TSP problem solver:")
-greedy_solver = GreedyTspSolver()
-greedy_solver.solve()
+CONFIG_FILE_PATH = './config.json'
 
-print("Randomized TSP problem solver:")
-random_solver = RandomTspSolver()
-random_solver.solve()
+config = ConfigLoader.load(CONFIG_FILE_PATH)
 
-print("Genetic TSP problem solver:")
-genetic_solver = GeneticTspSolver()
-genetic_solver.solve()
+instance_loader = InstanceLoader()
+instance =  instance_loader.load(config.get('instance_file_path'))
+
+print(config)
+
+SOLVERS = {
+    "greedy": GreedyTspSolver(instance, solver_config=config.get('greedy')),
+    "genetic": GeneticTspSolver(instance, solver_config=config.get('genetic')),
+    "random": RandomTspSolver(instance, solver_config=config.get('random'))
+}
+
+algorithm = config.get('algorithm')
+solver = SOLVERS[algorithm]
+print(f"{algorithm} TSP problem solver:")
+solver.solve()

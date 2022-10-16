@@ -1,4 +1,3 @@
-from re import L
 from .base import BaseTspSolver
 import typing as t
 from models import Vertex, Instance
@@ -17,22 +16,26 @@ class GeneticTspSolver(BaseTspSolver):
         - tournament
         - roulette
     """
-    POPULATION_SIZE = 5  # default 100
-    TOURNAMENT_SIZE = 1  # default 5
-    NUMBER_OF_TOURNAMENTS = 5
-    MAX_NUM_OF_GEN = 100  # default 100
-
     EVALUATION_DECIMAL_PRECISION = 6
 
-    def solve(self) -> t.Tuple[int, t.List[Vertex]]:
+    def __init__(self, instance: Instance, solver_config: dict):
+        super().__init__(instance, solver_config)
+        self._population_size = self._config.get("population_size", 100)
+        self._tournament_size = self._config.get("tournament_size", 5)
+        self._number_of_tournaments = self._config.get("number_of_tournaments", 20)
+        self._max_num_of_gen = self._config.get("max_number_of_generations", 100)
 
+        self._mutation = self._config.get("mutation")
+        self._selection = self._config.get("selection")
+
+
+    def solve(self) -> t.Tuple[int, t.List[Vertex]]:
         total_cost = None
         path = []
 
-        instance = self._instance_loader.load("./instances/berlin11_modified.tsp")
         current_num_of_gen = 0
 
-        population = self._initialization(instance)  # init generation
+        population = self._initialization(self._instance)  # init generation
         # print(population)
         evaluation = self._evaluation(population)
         # print(evaluation)
@@ -48,13 +51,13 @@ class GeneticTspSolver(BaseTspSolver):
 
     def _stop_condition_achieved(self, current_num_of_gen) -> bool:
         # TODO maybe add other stop conditions
-        if current_num_of_gen >= self.MAX_NUM_OF_GEN:
+        if current_num_of_gen >= self._max_num_of_gen:
             return True
         return False
 
     def _initialization(self, instance: Instance) -> t.List[t.List[Vertex]]:
         init_population = []
-        for _ in range(0, self.POPULATION_SIZE):
+        for _ in range(0, self._population_size):
             specimen = self._generate_random_route(instance)
             init_population.append(specimen)
         return init_population
@@ -86,7 +89,7 @@ class GeneticTspSolver(BaseTspSolver):
     def _selection_tournament(self, population: t.List[t.List[Vertex]], evaluation: t.List[float]) -> t.List[Vertex]:
         best_rating = -1
         best_specimen_index = None
-        selected_specimens_indexes = random.sample(range(self.POPULATION_SIZE), self.TOURNAMENT_SIZE)
+        selected_specimens_indexes = random.sample(range(self._population_size), self._tournament_size)
 
         for specimen_index in selected_specimens_indexes:
             if best_rating < evaluation[specimen_index]:

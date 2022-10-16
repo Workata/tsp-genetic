@@ -13,28 +13,26 @@ class GreedyTspSolver(BaseTspSolver):
     """
 
     def solve(self) -> t.Tuple[int, t.List[Vertex]]:
-        # berlin11_modified.tsp gr666.tsp
-        instance = self._instance_loader.load("./instances/berlin11_modified.tsp")
-        adj_matrix = self._matrix_creator.create(instance)
+        adj_matrix = self._matrix_creator.create(self._instance)
 
         min_distance: float = np.Inf
         min_route: t.List[Vertex] = None
 
-        for starting_vertex in instance.vertices:
+        for starting_vertex in self._instance.vertices:
             visited_vertices = [starting_vertex]
             total_cost = 0
 
             temp_mini = np.Inf
             temp_vertex = None
 
-            while len(visited_vertices) != instance.dimension:
+            while len(visited_vertices) != self._instance.dimension:
                 vertex_a = visited_vertices[-1]  # V_a => recently visited vertex
 
                 temp_mini = np.Inf
                 temp_vertex = None
 
                 # * find the lowest cost of V_a -----> V_b connection (edge)
-                for vertex_b in instance.vertices:
+                for vertex_b in self._instance.vertices:
                     if vertex_b in visited_vertices:
                         continue
 

@@ -9,10 +9,12 @@ import random
 
 class BaseTspSolver(ABC):
 
-    def __init__(self):
-        self._instance_loader = InstanceLoader()
+    def __init__(self, instance: Instance, solver_config: dict):
+        self._config = solver_config
+        self._instance = instance
         self._calculator = Calculator()
         self._matrix_creator = AdjencyMatrixCreator(calculator=self._calculator)
+
 
     @abstractmethod
     def solve(self) -> t.Tuple[int, t.List[Vertex]]:
