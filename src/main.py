@@ -1,6 +1,8 @@
 from algorithms import GreedyTspSolver, RandomTspSolver, GeneticTspSolver
 from loaders import ConfigLoader, InstanceLoader
 
+# TODO csv output
+# TODO re run - repetitions
 
 CONFIG_FILE_PATH = './config.json'
 
