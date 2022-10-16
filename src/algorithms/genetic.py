@@ -122,6 +122,7 @@ class GeneticTspSolver(BaseTspSolver):
 
     def _mutation_swap(self, to_mutate: t.List[Vertex]) -> t.List[Vertex]:
         random_ints: t.List[int] = random.sample(range(0, self._instance.dimension), 2)
+        random_ints.sort()
         to_mutate[random_ints[0]], to_mutate[random_ints[1]] = to_mutate[random_ints[1]], to_mutate[random_ints[0]]
         return to_mutate
 
