@@ -24,6 +24,8 @@ class AdjencyMatrixCreator:
         self._calculator = calculator
 
     def create(self, instance: Instance) -> np.ndarray:
+        print("[INFO] Creating adjency matrix...")
+
         num_of_vertices = instance.dimension
         matrix = np.zeros((num_of_vertices + 1, num_of_vertices + 1), dtype=float)
 
@@ -37,4 +39,5 @@ class AdjencyMatrixCreator:
                 # symmetric adjacency matrix
                 matrix[vertex_a.number][vertex_b.number] = distance
 
+        print("[INFO] Ajdency matrix has been created!")
         return matrix

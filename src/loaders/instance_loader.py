@@ -8,6 +8,8 @@ class InstanceLoader:
     SPLITTER = "NODE_COORD_SECTION"
 
     def load(self, file_path: str) -> Instance:
+        print("[INFO] Loading instance...")
+
         with open(file_path) as f:
             file_content = f.read()
             splitted_content = file_content.split(self.SPLITTER)
@@ -24,6 +26,7 @@ class InstanceLoader:
                 vertices=self._get_vertices(raw_vertices)
             )
 
+            print(f"[INFO] Instance has been loaded! Name: {instance.name}, Size: {instance.dimension} vertices.")
             return instance
 
     def _find_attribute_value(self, attribute_name: str, raw_attributes: str):

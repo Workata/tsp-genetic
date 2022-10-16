@@ -15,8 +15,8 @@ class GreedyTspSolver(BaseTspSolver):
     def solve(self) -> t.Tuple[int, t.List[Vertex]]:
         adj_matrix = self._matrix_creator.create(self._instance)
 
-        min_distance: float = np.Inf
-        min_route: t.List[Vertex] = None
+        best_cost: float = np.Inf
+        best_route: t.List[Vertex] = None
 
         start = time.time_ns()
 
@@ -51,15 +51,14 @@ class GreedyTspSolver(BaseTspSolver):
             total_cost += adj_matrix[last_vertex.number][starting_vertex.number]
             total_cost = round(total_cost, 2)
 
-            if total_cost < min_distance:
-                min_distance = total_cost
-                min_route = visited_vertices
+            if total_cost < best_cost:
+                best_cost = total_cost
+                best_route = visited_vertices
 
-        print((min_distance, min_route))
         end = time.time_ns()
         fin_time = (end-start) / 1000000000
         print("CZASSS")
         print(fin_time)
         # print(min_distance)
 
-        return min_distance, min_route
+        return best_cost, best_route

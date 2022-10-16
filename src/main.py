@@ -21,5 +21,7 @@ SOLVERS = {
 
 algorithm = config.get('algorithm')
 solver = SOLVERS[algorithm]
-print(f"{algorithm} TSP problem solver:")
-solver.solve()
+print(f"[INFO] TSP problem solver ({algorithm})")
+best_cost, best_route = solver.solve()
+print(f"[INFO] Best cost: {best_cost}")
+print(f"[INFO] Best route: {best_route}")
