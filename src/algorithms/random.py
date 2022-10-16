@@ -14,10 +14,10 @@ class RandomTspSolver(BaseTspSolver):
     @time_counter
     def solve(self):
         min_distance = np.Inf
-        min_route: t.List[Vertex]
+        min_route = None
 
         for _ in range(self._random_repeat):
-            generated_route = self._generate_random_route(self.instance)
+            generated_route = self._generate_random_route()
             total_distance = self._calculate_total_distance(generated_route)
 
             if total_distance < min_distance:

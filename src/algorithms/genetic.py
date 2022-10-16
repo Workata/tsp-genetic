@@ -98,7 +98,7 @@ class GeneticTspSolver(BaseTspSolver):
     def _initialization(self, instance: Instance) -> t.List[t.List[Vertex]]:
         init_population = []
         for _ in range(0, self._population_size):
-            specimen = self._generate_random_route(instance)
+            specimen = self._generate_random_route()
             init_population.append(specimen)
         return init_population
 

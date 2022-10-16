@@ -24,8 +24,8 @@ class BaseTspSolver(ABC):
     def solve(self) -> t.Tuple[int, t.List[Vertex]]:
         pass
 
-    def _generate_random_route(self, instance: Instance) -> t.List[Vertex]:
-        new_route = instance.vertices.copy()
+    def _generate_random_route(self) -> t.List[Vertex]:
+        new_route = self.instance.vertices.copy()
         random.shuffle(new_route)
         return new_route
 
