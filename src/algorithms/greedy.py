@@ -2,23 +2,21 @@ import numpy as np
 import typing as t
 from models import Vertex
 from .base import BaseTspSolver
-import time
+from utils import time_counter
 
 
 class GreedyTspSolver(BaseTspSolver):
     """
-    WIP
     TODO Improve SPEED! !!
     TODO decorators - time, csv output?
     """
 
+    @time_counter
     def solve(self) -> t.Tuple[int, t.List[Vertex]]:
         adj_matrix = self._matrix_creator.create(self._instance)
 
         best_cost: float = np.Inf
         best_route: t.List[Vertex] = None
-
-        start = time.time_ns()
 
         for starting_vertex in self._instance.vertices:
             visited_vertices = [starting_vertex]
@@ -54,11 +52,5 @@ class GreedyTspSolver(BaseTspSolver):
             if total_cost < best_cost:
                 best_cost = total_cost
                 best_route = visited_vertices
-
-        end = time.time_ns()
-        fin_time = (end-start) / 1000000000
-        print("CZASSS")
-        print(fin_time)
-        # print(min_distance)
 
         return best_cost, best_route
