@@ -3,6 +3,7 @@ import typing as t
 from utils import Calculator, AdjencyMatrixCreator
 from models import Vertex, Instance
 import random
+import pandas as pd
 
 
 class BaseTspSolver(ABC):
@@ -11,9 +12,13 @@ class BaseTspSolver(ABC):
 
     def __init__(self, instance: Instance, solver_config: dict):
         self._config = solver_config
-        self._instance = instance
         self._calculator = Calculator()
         self._matrix_creator = AdjencyMatrixCreator(calculator=self._calculator)
+
+        # instance is public - needed for output
+        self.instance = instance
+        self.output_df = pd.DataFrame()
+
 
     @abstractmethod
     def solve(self) -> t.Tuple[int, t.List[Vertex]]:

@@ -3,6 +3,7 @@ import typing as t
 from models import Vertex, Instance
 import random
 import numpy as np
+from utils import time_counter
 
 
 class GeneticTspSolver(BaseTspSolver):
@@ -30,13 +31,14 @@ class GeneticTspSolver(BaseTspSolver):
         self._mutation_probability = self._config.get("mutation_probability", 0.1)
         self._selection = self._config.get("selection", "tournament")
 
+    @time_counter
     def solve(self) -> t.Tuple[int, t.List[Vertex]]:
         # * init vars
         current_num_of_gen = 0
         best_specimen = None
         best_cost = np.Inf
 
-        population = self._initialization(self._instance)  # init generation
+        population = self._initialization(self.instance)  # init generation
         evaluation = self._evaluation(population)
 
         while not self._stop_condition_achieved(current_num_of_gen):
@@ -142,7 +144,7 @@ class GeneticTspSolver(BaseTspSolver):
     def _crossover_ordered(self, specimen_1: t.List[Vertex], specimen_2: t.List[Vertex]) -> t.List[t.List[Vertex]]:
         children: t.List[t.List[Vertex]] = []
         for _ in range(2):
-            child: t.List[Vertex] = [None] * self._instance.dimension
+            child: t.List[Vertex] = [None] * self.instance.dimension
             random_ints: t.List[int] = random.sample(range(0, len(specimen_1)), 2)
             random_ints.sort()
             child[random_ints[0]:random_ints[1]] = specimen_1[random_ints[0]:random_ints[1]]
@@ -159,13 +161,13 @@ class GeneticTspSolver(BaseTspSolver):
         pass
 
     def _mutation_swap(self, to_mutate: t.List[Vertex]) -> t.List[Vertex]:
-        random_ints: t.List[int] = random.sample(range(0, self._instance.dimension), 2)
+        random_ints: t.List[int] = random.sample(range(0, self.instance.dimension), 2)
         random_ints.sort()
         to_mutate[random_ints[0]], to_mutate[random_ints[1]] = to_mutate[random_ints[1]], to_mutate[random_ints[0]]
         return to_mutate
 
     def _mutation_inversion(self, to_mutate: t.List[Vertex]) -> t.List[Vertex]:
-        random_ints: t.List[int] = random.sample(range(0, self._instance.dimension), 2)
+        random_ints: t.List[int] = random.sample(range(0, self.instance.dimension), 2)
         random_ints.sort()
         to_mutate[random_ints[0]:random_ints[1]] = to_mutate[random_ints[0]:random_ints[1]][::-1]
         return to_mutate

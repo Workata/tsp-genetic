@@ -30,3 +30,8 @@ for i in range(1, repetitions+1):
     print(f"[INFO] Best cost: {best_cost}")
     print(f"[INFO] Best route: {best_route}")
     print(f"[INFO] ------------------- ITERATION {i} END -------------------\n")
+
+
+# * save results in csv file
+output_file_path = config.get('output_file_path')
+solver.output_df.to_csv(output_file_path)
