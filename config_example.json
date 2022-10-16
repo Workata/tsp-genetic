@@ -1,10 +1,21 @@
 {
-  "algorithm": "greedy",
-  "instance_file_name": "berlin11_modified.tsp",
-  "output_file_name": "test_1.csv",
+  "algorithm": "random",
+  "instance_file_path": "./instances/berlin11_modified.tsp",
+  "output_file_path": "./output/test_1.csv",
   "repetitions": 5,
 
+  "genetic": {
+    "population_size": 100,
+    "max_number_of_generations": 100,
+
+    "tournament_size": 5,
+    "number_of_tournaments": 5,
+
+
+    "mutation": "swap",
+    "selection": "tournament"
+  },
+
   "greedy": {},
-  "random": {},
-  "genetic": {}
+  "random": {}
 }
