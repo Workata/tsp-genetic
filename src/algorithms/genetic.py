@@ -2,7 +2,7 @@ from .base import BaseTspSolver
 import typing as t
 from models import Vertex, Instance
 import random
-
+import numpy as np
 
 class GeneticTspSolver(BaseTspSolver):
     """
@@ -16,7 +16,7 @@ class GeneticTspSolver(BaseTspSolver):
         - tournament
         - roulette
     """
-    EVALUATION_DECIMAL_PRECISION = 6
+    EVALUATION_DECIMAL_PRECISION = 10
 
     def __init__(self, instance: Instance, solver_config: dict):
         super().__init__(instance, solver_config)
@@ -25,29 +25,69 @@ class GeneticTspSolver(BaseTspSolver):
         self._number_of_tournaments = self._config.get("number_of_tournaments", 20)
         self._max_num_of_gen = self._config.get("max_number_of_generations", 100)
 
-        self._mutation = self._config.get("mutation")
-        self._selection = self._config.get("selection")
+        self._mutation = self._config.get("mutation", "swap")
+        self._mutation_probability = self._config.get("mutation_probability", 0.1)
+        self._selection = self._config.get("selection", "tournament")
 
 
     def solve(self) -> t.Tuple[int, t.List[Vertex]]:
-        total_cost = None
-        path = []
-
+        # * init vars
         current_num_of_gen = 0
+        best_specimen = None
+        best_cost = np.Inf
 
         population = self._initialization(self._instance)  # init generation
-        # print(population)
         evaluation = self._evaluation(population)
-        # print(evaluation)
 
         while not self._stop_condition_achieved(current_num_of_gen):
-            self._selection_tournament(population, evaluation)
-            self._crossover()
-            population = self._mutation_swap(population)
+
+            temp_cost, temp_specimen = self._select_best_specimen_from_population(population)
+            if temp_cost < best_cost:
+                best_cost = temp_cost
+                best_specimen = temp_specimen
+
+            # * selection
+            tournament_winners = []
+            for _ in range(self._number_of_tournaments):
+                winner_specimen = self._selection_tournament(population, evaluation)
+                tournament_winners.append(winner_specimen)
+
+            # * crossover
+            new_population = []
+            while len(new_population) < self._population_size :
+                selected_winners = random.sample(tournament_winners, 2)
+                child = self._crossover_ordered(selected_winners[0], selected_winners[1])[0]
+                new_population.append(child)
+
+            population = new_population
+
+            # * mutation
+            for idx, specimen in enumerate(population):
+                if self._should_mutate():
+                    population[idx] = self._mutation_swap(specimen)
+
+            # * evaluation
             evaluation = self._evaluation(population)
             current_num_of_gen += 1
 
-        return total_cost, path
+        print(f"Best cost: {best_cost}")
+        print(f"Best specimen: {best_specimen}")
+        return best_cost, best_specimen
+
+
+    def _should_mutate(self) -> bool:
+        return random.random() < self._mutation_probability
+
+    def _select_best_specimen_from_population(self, population: t.List[t.List[Vertex]]) -> t.Tuple[int, t.List[Vertex]]:
+        best_specimen = None
+        best_cost = np.Inf
+        for specimen in population:
+            current_cost = self._calculate_total_distance(specimen)
+            if current_cost < best_cost:
+                best_specimen = specimen
+                best_cost = current_cost
+        return best_cost, best_specimen
+
 
     def _stop_condition_achieved(self, current_num_of_gen) -> bool:
         # TODO maybe add other stop conditions

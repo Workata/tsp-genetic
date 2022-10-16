@@ -11,7 +11,7 @@ config = ConfigLoader.load(CONFIG_FILE_PATH)
 instance_loader = InstanceLoader()
 instance =  instance_loader.load(config.get('instance_file_path'))
 
-print(config)
+# print(config)
 
 SOLVERS = {
     "greedy": GreedyTspSolver(instance, solver_config=config.get('greedy')),

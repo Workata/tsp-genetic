@@ -30,4 +30,4 @@ class BaseTspSolver(ABC):
         for i in range(len(route) - 1):
             total_distance += self._calculator.calculate_distance_between_vertices(route[i], route[i + 1])
         total_distance += self._calculator.calculate_distance_between_vertices(route[-1], route[0])
-        return round(total_distance, 2)
+        return round(total_distance)

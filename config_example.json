@@ -1,6 +1,6 @@
 {
-  "algorithm": "random",
-  "instance_file_path": "./instances/berlin11_modified.tsp",
+  "algorithm": "genetic",
+  "instance_file_path": "./instances/berlin52.tsp",
   "output_file_path": "./output/test_1.csv",
   "repetitions": 5,
 
@@ -9,10 +9,12 @@
     "max_number_of_generations": 100,
 
     "tournament_size": 5,
-    "number_of_tournaments": 5,
+    "number_of_tournaments": 50,
 
 
     "mutation": "swap",
+    "mutation_probability": 0.1,
+
     "selection": "tournament"
   },
 
