@@ -4,6 +4,7 @@ from models import Vertex, Instance
 import random
 import numpy as np
 
+
 class GeneticTspSolver(BaseTspSolver):
     """
     fitness function: f(total_cost) = 1/total_cost
@@ -29,7 +30,6 @@ class GeneticTspSolver(BaseTspSolver):
         self._mutation_probability = self._config.get("mutation_probability", 0.1)
         self._selection = self._config.get("selection", "tournament")
 
-
     def solve(self) -> t.Tuple[int, t.List[Vertex]]:
         # * init vars
         current_num_of_gen = 0
@@ -54,7 +54,7 @@ class GeneticTspSolver(BaseTspSolver):
 
             # * crossover
             new_population = []
-            while len(new_population) < self._population_size :
+            while len(new_population) < self._population_size:
                 selected_winners = random.sample(tournament_winners, 2)
                 child = self._crossover_ordered(selected_winners[0], selected_winners[1])[0]
                 new_population.append(child)
@@ -74,7 +74,6 @@ class GeneticTspSolver(BaseTspSolver):
         print(f"Best specimen: {best_specimen}")
         return best_cost, best_specimen
 
-
     def _should_mutate(self) -> bool:
         return random.random() < self._mutation_probability
 
@@ -87,7 +86,6 @@ class GeneticTspSolver(BaseTspSolver):
                 best_specimen = specimen
                 best_cost = current_cost
         return best_cost, best_specimen
-
 
     def _stop_condition_achieved(self, current_num_of_gen) -> bool:
         # TODO maybe add other stop conditions

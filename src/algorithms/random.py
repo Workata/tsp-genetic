@@ -3,6 +3,7 @@ import numpy as np
 import typing as t
 from .base import BaseTspSolver
 
+
 class RandomTspSolver(BaseTspSolver):
 
     def solve(self):

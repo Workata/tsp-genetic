@@ -85,5 +85,3 @@ class InstanceLoader:
             )
             vertices.append(vertex)
         return vertices
-
-

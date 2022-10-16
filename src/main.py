@@ -9,7 +9,7 @@ CONFIG_FILE_PATH = './config.json'
 config = ConfigLoader.load(CONFIG_FILE_PATH)
 
 instance_loader = InstanceLoader()
-instance =  instance_loader.load(config.get('instance_file_path'))
+instance = instance_loader.load(config.get('instance_file_path'))
 
 # print(config)
 

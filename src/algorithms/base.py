@@ -1,9 +1,7 @@
 from abc import abstractmethod, ABC
 import typing as t
 from utils import Calculator, AdjencyMatrixCreator
-from models import Vertex
-from loaders import InstanceLoader
-from models import Instance
+from models import Vertex, Instance
 import random
 
 
@@ -16,7 +14,6 @@ class BaseTspSolver(ABC):
         self._instance = instance
         self._calculator = Calculator()
         self._matrix_creator = AdjencyMatrixCreator(calculator=self._calculator)
-
 
     @abstractmethod
     def solve(self) -> t.Tuple[int, t.List[Vertex]]:
