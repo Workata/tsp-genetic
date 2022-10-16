@@ -101,31 +101,32 @@ class GeneticTspSolver(BaseTspSolver):
     def _selection_roulette(self):
         pass
 
-    def _crossover_ordered(self, specimen_1: t.List[Vertex], specimen_2: t.List[Vertex]) -> t.List[Vertex]:
-        child: t.List[Vertex] = [None] * len(specimen_1)
-        random_ints: t.List[int] = random.sample(range(0, len(specimen_1)), 2)
-        if random_ints[0] > random_ints[1]:
-            child[random_ints[1]:random_ints[0]] = specimen_1[random_ints[1]:random_ints[0]]
-        else:
+    def _crossover_ordered(self, specimen_1: t.List[Vertex], specimen_2: t.List[Vertex]) -> t.List[t.List[Vertex]]:
+        children: t.List[t.List[Vertex]] = []
+        for _ in range(2):
+            child: t.List[Vertex] = [None] * self._instance.dimension
+            random_ints: t.List[int] = random.sample(range(0, len(specimen_1)), 2)
+            random_ints.sort()
             child[random_ints[0]:random_ints[1]] = specimen_1[random_ints[0]:random_ints[1]]
+            child_none_indices = [i for i in range(len(child)) if child[i] is None]
+            for vertex in specimen_2:
+                if vertex in child:
+                    continue
+                child[child_none_indices[0]] = vertex
+                child_none_indices.pop(0)
+            children.append(child)
+        return children
 
-        child_none_indices = [i for i in range(len(child)) if child[i] is None]
-        for vertex in specimen_2:
-            if vertex in child:
-                continue
-            child[child_none_indices[0]] = vertex
-            child_none_indices.pop(0)
-        return child
+    def _crossover_partially_matched(self, specimen_1: t.List[Vertex], specimen_2: t.List[Vertex]) -> t.List[Vertex]:
+        pass
 
     def _mutation_swap(self, to_mutate: t.List[Vertex]) -> t.List[Vertex]:
-        random_ints: t.List[int] = random.sample(range(0, len(to_mutate) - 1), 2)
+        random_ints: t.List[int] = random.sample(range(0, self._instance.dimension), 2)
         to_mutate[random_ints[0]], to_mutate[random_ints[1]] = to_mutate[random_ints[1]], to_mutate[random_ints[0]]
         return to_mutate
 
     def _mutation_inversion(self, to_mutate: t.List[Vertex]) -> t.List[Vertex]:
-        random_ints: t.List[int] = random.sample(range(0, len(to_mutate)), 2)
-        if random_ints[0] > random_ints[1]:
-            to_mutate[random_ints[1]:random_ints[0]] = to_mutate[random_ints[1]:random_ints[0]][::-1]
-        else:
-            to_mutate[random_ints[0]:random_ints[1]] = to_mutate[random_ints[0]:random_ints[1]][::-1]
+        random_ints: t.List[int] = random.sample(range(0, self._instance.dimension), 2)
+        random_ints.sort()
+        to_mutate[random_ints[0]:random_ints[1]] = to_mutate[random_ints[0]:random_ints[1]][::-1]
         return to_mutate
