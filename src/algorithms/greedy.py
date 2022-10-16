@@ -41,10 +41,10 @@ class GreedyTspSolver(BaseTspSolver):
                     distance = adj_matrix[vertex_a.number][vertex_b.number]
                     if temp_mini > distance:
                         temp_vertex = vertex_b
-                        mini = distance
+                        temp_mini = distance
 
                 visited_vertices.append(temp_vertex)
-                total_cost += mini
+                total_cost += temp_mini
 
             # ! add cost of a last edge
             last_vertex = visited_vertices[-1]
