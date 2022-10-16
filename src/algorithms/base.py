@@ -9,6 +9,8 @@ import random
 
 class BaseTspSolver(ABC):
 
+    DISTANCE_DECIMAL_PRECISION = 2
+
     def __init__(self, instance: Instance, solver_config: dict):
         self._config = solver_config
         self._instance = instance
@@ -25,9 +27,9 @@ class BaseTspSolver(ABC):
         random.shuffle(new_route)
         return new_route
 
-    def _calculate_total_distance(self, route: t.List[Vertex]) -> int:
+    def _calculate_total_distance(self, route: t.List[Vertex]) -> float:
         total_distance: float = 0.0
         for i in range(len(route) - 1):
             total_distance += self._calculator.calculate_distance_between_vertices(route[i], route[i + 1])
         total_distance += self._calculator.calculate_distance_between_vertices(route[-1], route[0])
-        return round(total_distance)
+        return round(total_distance, self.DISTANCE_DECIMAL_PRECISION)

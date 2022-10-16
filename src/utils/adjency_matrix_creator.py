@@ -25,7 +25,7 @@ class AdjencyMatrixCreator:
 
     def create(self, instance: Instance) -> np.ndarray:
         num_of_vertices = instance.dimension
-        matrix = np.zeros((num_of_vertices + 1, num_of_vertices + 1), dtype=int)
+        matrix = np.zeros((num_of_vertices + 1, num_of_vertices + 1), dtype=float)
 
         for vertex_a in instance.vertices:
             for vertex_b in instance.vertices:

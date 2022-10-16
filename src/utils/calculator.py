@@ -4,7 +4,9 @@ import math
 
 class Calculator:
 
-    def calculate_distance_between_vertices(self, vertex_a: Vertex, vertex_b: Vertex) -> int:
+    DISTANCE_DECIMAL_PRECISION = 2
+
+    def calculate_distance_between_vertices(self, vertex_a: Vertex, vertex_b: Vertex) -> float:
         """
         Equation:
         A = (x_1, y_1), B = (x_2, y_2)
@@ -19,4 +21,4 @@ class Calculator:
         """
         x_diff = vertex_a.x - vertex_b.x
         y_diff = vertex_a.y - vertex_b.y
-        return round(math.sqrt(pow(x_diff, 2) + pow(y_diff, 2)))
+        return round(math.sqrt(pow(x_diff, 2) + pow(y_diff, 2)), self.DISTANCE_DECIMAL_PRECISION)
