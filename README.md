@@ -32,6 +32,13 @@ pip install -r ./requirements/dev.txt
 python3 ./src/main.py
 ```
 
+### Test code
+
+* Linter (flake8)
+```sh
+flake8 ./src/
+```
+
 ## Selected TSP Instances
 
 |Instance|  Number of Cities | Optimal Solution  |
