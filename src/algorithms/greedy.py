@@ -13,7 +13,6 @@ class GreedyTspSolver(BaseTspSolver):
 
     @time_counter
     def solve(self) -> t.Tuple[int, t.List[Vertex]]:
-        adj_matrix = self._matrix_creator.create(self.instance)
 
         best_cost: float = np.Inf
         best_route: t.List[Vertex] = None
@@ -36,7 +35,7 @@ class GreedyTspSolver(BaseTspSolver):
                     if vertex_b in visited_vertices:
                         continue
 
-                    distance = adj_matrix[vertex_a.number][vertex_b.number]
+                    distance = self._adj_matrix[vertex_a.number][vertex_b.number]
                     if temp_mini > distance:
                         temp_vertex = vertex_b
                         temp_mini = distance
@@ -46,7 +45,7 @@ class GreedyTspSolver(BaseTspSolver):
 
             # ! add cost of a last edge
             last_vertex = visited_vertices[-1]
-            total_cost += adj_matrix[last_vertex.number][starting_vertex.number]
+            total_cost += self._adj_matrix[last_vertex.number][starting_vertex.number]
             total_cost = round(total_cost, 2)
 
             if total_cost < best_cost:

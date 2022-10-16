@@ -1,5 +1,6 @@
 from algorithms import GreedyTspSolver, RandomTspSolver, GeneticTspSolver
 from loaders import ConfigLoader, InstanceLoader
+from utils import Calculator, AdjencyMatrixCreator
 
 # TODO csv output
 
@@ -10,11 +11,13 @@ config = ConfigLoader.load(CONFIG_FILE_PATH)
 instance_loader = InstanceLoader()
 instance = instance_loader.load(config.get('instance_file_path'))
 
+adj_matrix = AdjencyMatrixCreator(calculator=Calculator()).create(instance)
+
 
 SOLVERS = {
-    "greedy": GreedyTspSolver(instance, solver_config=config.get('greedy')),
-    "genetic": GeneticTspSolver(instance, solver_config=config.get('genetic')),
-    "random": RandomTspSolver(instance, solver_config=config.get('random'))
+    "greedy": GreedyTspSolver(instance, adj_matrix, solver_config=config.get('greedy')),
+    "genetic": GeneticTspSolver(instance, adj_matrix, solver_config=config.get('genetic')),
+    "random": RandomTspSolver(instance, adj_matrix, solver_config=config.get('random'))
 }
 
 algorithm = config.get('algorithm')

@@ -7,8 +7,8 @@ from utils import time_counter
 
 class RandomTspSolver(BaseTspSolver):
 
-    def __init__(self, instance: Instance, solver_config: dict):
-        super().__init__(instance, solver_config)
+    def __init__(self, instance: Instance, adj_matrix: np.ndarray, solver_config: dict):
+        super().__init__(instance, adj_matrix, solver_config)
         self._random_repeat = self._config.get("random_repeat", 1000000)
 
     @time_counter

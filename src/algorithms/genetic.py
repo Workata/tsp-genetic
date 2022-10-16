@@ -20,8 +20,9 @@ class GeneticTspSolver(BaseTspSolver):
     """
     EVALUATION_DECIMAL_PRECISION = 10
 
-    def __init__(self, instance: Instance, solver_config: dict):
-        super().__init__(instance, solver_config)
+    def __init__(self, instance: Instance, adj_matrix: np.ndarray, solver_config: dict):
+        super().__init__(instance, adj_matrix, solver_config)
+
         self._population_size = self._config.get("population_size", 100)
         self._tournament_size = self._config.get("tournament_size", 5)
         self._number_of_tournaments = self._config.get("number_of_tournaments", 20)
