@@ -17,6 +17,10 @@ class GeneticTspSolver(BaseTspSolver):
     selection:
         - tournament
         - roulette
+
+    crossover:
+        - ordered
+        - partially matched
     """
     EVALUATION_DECIMAL_PRECISION = 10
 
@@ -28,13 +32,13 @@ class GeneticTspSolver(BaseTspSolver):
         self._number_of_tournaments = self._config.get("number_of_tournaments", 20)
         self._max_num_of_gen = self._config.get("max_number_of_generations", 100)
 
-        self._mutation = self._config.get("mutation", "swap")
+        self._mutation_type = self._config.get("mutation", "swap")
         self._mutation_probability = self._config.get("mutation_probability", 0.1)
-        self._selection = self._config.get("selection", "tournament")
+        self._selection_type = self._config.get("selection", "tournament")
+        self._crossover_type = self._config.get("crossover", "ordered")
 
     @time_counter
     def solve(self) -> t.Tuple[int, t.List[Vertex]]:
-        # * init vars
         current_num_of_gen = 0
         best_specimen = None
         best_cost = np.Inf
@@ -50,32 +54,59 @@ class GeneticTspSolver(BaseTspSolver):
                 best_specimen = temp_specimen
 
             # * selection
-            tournament_winners = []
-            for _ in range(self._number_of_tournaments):
-                winner_specimen = self._selection_tournament(population, evaluation)
-                tournament_winners.append(winner_specimen)
+            selected_specimens = self._selection(population, evaluation)
 
             # * crossover
-            new_population = []
-            while len(new_population) < self._population_size:
-                selected_winners = random.sample(tournament_winners, 2)
-                child = self._crossover_ordered(selected_winners[0], selected_winners[1])[0]
-                new_population.append(child)
-
-            population = new_population
+            population = self._crossover(selected_specimens)
 
             # * mutation
-            for idx, specimen in enumerate(population):
-                if self._should_mutate():
-                    population[idx] = self._mutation_swap(specimen)
+            population = self._mutation(population)
 
             # * evaluation
             evaluation = self._evaluation(population)
             current_num_of_gen += 1
 
-        print(f"Best cost: {best_cost}")
-        print(f"Best specimen: {best_specimen}")
         return best_cost, best_specimen
+
+    def _selection(self, population: t.List[t.List[Vertex]], evaluation: t.List[float]) -> t.List[t.List[Vertex]]:
+        selected_specimens = []
+
+        if self._selection_type == 'tournament':
+            for _ in range(self._number_of_tournaments):
+                selected_specimen = self._selection_tournament(population, evaluation)
+                selected_specimens.append(selected_specimen)
+        elif self._selection_type == 'roulette':
+            # TODO implement roulette
+            selected_specimens = self._selection_roulette(population, evaluation)
+        else:
+            raise NotImplementedError
+        return selected_specimens
+
+    def _crossover(self, selected_specimens: t.List[t.List[Vertex]]) -> t.List[t.List[Vertex]]:
+        new_population = []
+
+        while len(new_population) < self._population_size:
+            parents = random.sample(selected_specimens, 2)
+            if self._crossover_type == 'ordered':
+                child = self._crossover_ordered(parents[0], parents[1])[0]
+            elif self._crossover_type == 'partially_matched':
+                # TODO implement partially matched
+                child = self._crossover_partially_matched(parents[0], parents[1])[0]
+            else:
+                raise NotImplementedError
+            new_population.append(child)
+        return new_population
+
+    def _mutation(self, population: t.List[t.List[Vertex]]) -> t.List[t.List[Vertex]]:
+        for idx, specimen in enumerate(population):
+            if self._should_mutate():
+                if self._mutation_type == 'swap':
+                    population[idx] = self._mutation_swap(specimen)
+                elif self._mutation_type == 'inversion':
+                    population[idx] = self._mutation_inversion(specimen)
+                else:
+                    raise NotImplementedError
+        return population
 
     def _should_mutate(self) -> bool:
         return random.random() < self._mutation_probability
@@ -91,7 +122,6 @@ class GeneticTspSolver(BaseTspSolver):
         return best_cost, best_specimen
 
     def _stop_condition_achieved(self, current_num_of_gen) -> bool:
-        # TODO maybe add other stop conditions
         if current_num_of_gen >= self._max_num_of_gen:
             return True
         return False
@@ -139,8 +169,8 @@ class GeneticTspSolver(BaseTspSolver):
 
         return population[best_specimen_index]
 
-    def _selection_roulette(self):
-        pass
+    def _selection_roulette(self, population: t.List[t.List[Vertex]], evaluation: t.List[float]) -> t.List[Vertex]:
+        raise NotImplementedError
 
     def _crossover_ordered(self, specimen_1: t.List[Vertex], specimen_2: t.List[Vertex]) -> t.List[t.List[Vertex]]:
         children: t.List[t.List[Vertex]] = []
@@ -159,7 +189,7 @@ class GeneticTspSolver(BaseTspSolver):
         return children
 
     def _crossover_partially_matched(self, specimen_1: t.List[Vertex], specimen_2: t.List[Vertex]) -> t.List[Vertex]:
-        pass
+        raise NotImplementedError
 
     def _mutation_swap(self, to_mutate: t.List[Vertex]) -> t.List[Vertex]:
         random_ints: t.List[int] = random.sample(range(0, self.instance.dimension), 2)

@@ -1,7 +1,7 @@
 {
-  "algorithm": "random",
+  "algorithm": "genetic",
   "instance_file_path": "./instances/kroA100.tsp",
-  "output_file_path": "./output/test_random_1000000.csv",
+  "output_file_path": "./output/test_genetic_param.csv",
   "repetitions": 3,
 
   "genetic": {
@@ -11,15 +11,14 @@
     "tournament_size": 5,
     "number_of_tournaments": 50,
 
-
-    "mutation": "swap",
     "mutation_probability": 0.1,
-
-    "selection": "tournament"
+    "mutation": "swap",
+    "selection": "tournament",
+    "crossover": "ordered"
   },
 
   "random": {
-    "random_repeat": 1000000
+    "random_repeat": 100000
   },
 
   "greedy": {}
