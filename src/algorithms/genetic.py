@@ -43,7 +43,7 @@ class GeneticTspSolver(BaseTspSolver):
         best_specimen = None
         best_cost = np.Inf
 
-        population = self._initialization(self.instance)  # init generation
+        population = self._initialization()  # init generation
         evaluation = self._evaluation(population)
 
         while not self._stop_condition_achieved(current_num_of_gen):
@@ -126,7 +126,7 @@ class GeneticTspSolver(BaseTspSolver):
             return True
         return False
 
-    def _initialization(self, instance: Instance) -> t.List[t.List[Vertex]]:
+    def _initialization(self) -> t.List[t.List[Vertex]]:
         init_population = []
         for _ in range(0, self._population_size):
             specimen = self._generate_random_route()
