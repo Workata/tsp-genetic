@@ -46,7 +46,7 @@ class GeneticTspSolver(BaseTspSolver):
 
         population = self._initialization()  # init generation
         evaluation = self._evaluation(population)
-        # return
+
         while not self._stop_condition_achieved(current_num_of_gen):
 
             temp_cost, temp_specimen = self._select_best_specimen_from_population(population)
