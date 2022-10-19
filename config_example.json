@@ -5,14 +5,14 @@
   "repetitions": 3,
 
   "genetic": {
-    "population_size": 100,
-    "max_number_of_generations": 100,
+    "population_size": 50,
+    "max_number_of_generations": 200,
 
-    "tournament_size": 5,
+    "tournament_size": 50,
     "number_of_tournaments": 50,
 
-    "mutation_probability": 0.1,
-    "mutation": "swap",
+    "mutation_probability": 0.5,
+    "mutation": "inversion",
     "selection": "tournament",
     "crossover": "ordered"
   },
