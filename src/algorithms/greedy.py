@@ -3,6 +3,7 @@ import typing as t
 from models import Vertex
 from .base import BaseTspSolver
 from utils import time_counter
+import copy
 
 
 class GreedyTspSolver(BaseTspSolver):
@@ -18,34 +19,34 @@ class GreedyTspSolver(BaseTspSolver):
         best_route: t.List[Vertex] = None
 
         for starting_vertex in self.instance.vertices:
+            unvisited_vertices = copy.copy(self.instance.vertices)
             visited_vertices = [starting_vertex]
+
+            unvisited_vertices.remove(starting_vertex)
+            recently_visited_vertex = starting_vertex
             total_cost = 0
 
-            temp_mini = np.Inf
-            temp_vertex = None
-
-            while len(visited_vertices) != self.instance.dimension:
-                vertex_a = visited_vertices[-1]  # V_a => recently visited vertex
+            while unvisited_vertices:
+                vertex_a = recently_visited_vertex  # V_a => recently visited vertex
 
                 temp_mini = np.Inf
                 temp_vertex = None
 
                 # * find the lowest cost of V_a -----> V_b connection (edge)
-                for vertex_b in self.instance.vertices:
-                    if vertex_b in visited_vertices:
-                        continue
+                for vertex_b in unvisited_vertices:
 
                     distance = self._adj_matrix[vertex_a.number][vertex_b.number]
                     if temp_mini > distance:
                         temp_vertex = vertex_b
                         temp_mini = distance
 
-                visited_vertices.append(temp_vertex)
+                recently_visited_vertex = temp_vertex
+                visited_vertices.append(recently_visited_vertex)
+                unvisited_vertices.remove(recently_visited_vertex)
                 total_cost += temp_mini
 
             # ! add cost of a last edge
-            last_vertex = visited_vertices[-1]
-            total_cost += self._adj_matrix[last_vertex.number][starting_vertex.number]
+            total_cost += self._adj_matrix[recently_visited_vertex.number][starting_vertex.number]
             total_cost = round(total_cost, 2)
 
             if total_cost < best_cost:
