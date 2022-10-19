@@ -1,6 +1,7 @@
 from algorithms import GreedyTspSolver, RandomTspSolver, GeneticTspSolver
 from loaders import ConfigLoader, InstanceLoader
 from utils import Calculator, AdjencyMatrixCreator
+import pandas as pd
 
 
 CONFIG_FILE_PATH = './config.json'
@@ -35,6 +36,14 @@ for i in range(1, repetitions+1):
     print(f"[INFO] Best route: {best_route}")
     print(f"[INFO] ------------------- ITERATION {i} END -------------------\n")
 
+
+# * calculate avg time and cost
+df = pd.DataFrame(data = [{
+    'avg time [s]': round(solver.output_df['time [s]'].mean(), 6),
+    'avg cost': round(solver.output_df['cost'].mean(), 2)
+}])
+
+solver.output_df = pd.concat([solver.output_df , df], ignore_index=True)
 
 # * save results in csv file
 output_file_path = config.get('output_file_path')
