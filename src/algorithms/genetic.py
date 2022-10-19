@@ -4,6 +4,7 @@ from models import Vertex, Instance
 import random
 import numpy as np
 from utils import time_counter
+import math
 
 
 class GeneticTspSolver(BaseTspSolver):
@@ -70,14 +71,14 @@ class GeneticTspSolver(BaseTspSolver):
 
     def _selection(self, population: t.List[t.List[Vertex]], evaluation: t.List[float]) -> t.List[t.List[Vertex]]:
         selected_specimens = []
-
         if self._selection_type == 'tournament':
             for _ in range(self._number_of_tournaments):
                 selected_specimen = self._selection_tournament(population, evaluation)
                 selected_specimens.append(selected_specimen)
         elif self._selection_type == 'roulette':
-            # TODO implement roulette
-            selected_specimens = self._selection_roulette(population, evaluation)
+            for _ in range(self._population_size):
+                selected_specimen = self._selection_roulette(population, evaluation)
+                selected_specimens.append(selected_specimen)
         else:
             raise NotImplementedError
         return selected_specimens
@@ -150,8 +151,10 @@ class GeneticTspSolver(BaseTspSolver):
         """
         ratings = []
         for specimen in population:
+            total_cost = self._calculate_total_distance(specimen)
+            # * 1/x OR 1 / math.log(1+x)
             rating = round(
-                1 / self._calculate_total_distance(specimen),
+                1 / math.log(1+total_cost),
                 self.EVALUATION_DECIMAL_PRECISION
             )
             ratings.append(rating)
@@ -170,7 +173,26 @@ class GeneticTspSolver(BaseTspSolver):
         return population[best_specimen_index]
 
     def _selection_roulette(self, population: t.List[t.List[Vertex]], evaluation: t.List[float]) -> t.List[Vertex]:
-        raise NotImplementedError
+        evaluation_sum = sum(evaluation)
+        probability_rate_all = [eva/evaluation_sum for eva in evaluation]
+        evaluation_indexes_mapping = sorted(range(len(probability_rate_all)), key=lambda k: probability_rate_all[k], reverse=True)
+        sorted_probability_rate_all = sorted(probability_rate_all, reverse=True)
+        probability_inflow = sorted_probability_rate_all
+
+        for i in range(len(sorted_probability_rate_all)):
+            if i == 0:
+                continue
+            elif i == len(sorted_probability_rate_all) -1:
+                probability_inflow[i] = 1
+            else:
+                probability_inflow[i] += probability_inflow[i-1]
+
+        toss = random.random()
+        for i in range(len(probability_inflow)):
+            if toss <= probability_inflow[i]:
+                return population[evaluation_indexes_mapping[i]]
+        raise Exception('If this happened then selection_roulette has a bug :)')
+
 
     def _crossover_ordered(self, specimen_1: t.List[Vertex], specimen_2: t.List[Vertex]) -> t.List[t.List[Vertex]]:
         children: t.List[t.List[Vertex]] = []
