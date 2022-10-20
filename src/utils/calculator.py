@@ -1,12 +1,10 @@
 from models import Vertex
 import math
-from functools import lru_cache
 
 class Calculator:
 
     DISTANCE_DECIMAL_PRECISION = 2
 
-    # @lru_cache(maxsize=None)
     def calculate_distance_between_vertices(self, vertex_a: Vertex, vertex_b: Vertex) -> float:
         """
         Equation:

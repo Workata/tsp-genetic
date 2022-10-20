@@ -39,6 +39,12 @@ python3 ./src/main.py
 flake8 ./src/
 ```
 
+* Unit tests (pytest)
+```sh
+cd ./src/
+python -m pytest tests/
+```
+
 ## Selected TSP Instances
 
 |Instance|  Number of Cities | Optimal Solution  |
