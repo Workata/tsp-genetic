@@ -154,7 +154,7 @@ class GeneticTspSolver(BaseTspSolver):
             total_cost = self._calculate_total_distance(specimen)
             # * 1/x OR 1 / math.log(1+x)
             rating = round(
-                1 / math.log(1+total_cost),
+                1 / math.log(1 + total_cost),
                 self.EVALUATION_DECIMAL_PRECISION
             )
             ratings.append(rating)
@@ -174,25 +174,25 @@ class GeneticTspSolver(BaseTspSolver):
 
     def _selection_roulette(self, population: t.List[t.List[Vertex]], evaluation: t.List[float]) -> t.List[Vertex]:
         evaluation_sum = sum(evaluation)
-        probability_rate_all = [eva/evaluation_sum for eva in evaluation]
-        evaluation_indexes_mapping = sorted(range(len(probability_rate_all)), key=lambda k: probability_rate_all[k], reverse=True)
+        probability_rate_all = [eva / evaluation_sum for eva in evaluation]
+        evaluation_indexes_mapping = sorted(range(len(probability_rate_all)), key=lambda k: probability_rate_all[k],
+                                            reverse=True)
         sorted_probability_rate_all = sorted(probability_rate_all, reverse=True)
         probability_inflow = sorted_probability_rate_all
 
         for i in range(len(sorted_probability_rate_all)):
             if i == 0:
                 continue
-            elif i == len(sorted_probability_rate_all) -1:
+            elif i == len(sorted_probability_rate_all) - 1:
                 probability_inflow[i] = 1
             else:
-                probability_inflow[i] += probability_inflow[i-1]
+                probability_inflow[i] += probability_inflow[i - 1]
 
         toss = random.random()
         for i in range(len(probability_inflow)):
             if toss <= probability_inflow[i]:
                 return population[evaluation_indexes_mapping[i]]
         raise Exception('If this happened then selection_roulette has a bug :)')
-
 
     def _crossover_ordered(self, specimen_1: t.List[Vertex], specimen_2: t.List[Vertex]) -> t.List[t.List[Vertex]]:
         children: t.List[t.List[Vertex]] = []
@@ -210,8 +210,68 @@ class GeneticTspSolver(BaseTspSolver):
             children.append(child)
         return children
 
-    def _crossover_partially_matched(self, specimen_1: t.List[Vertex], specimen_2: t.List[Vertex]) -> t.List[Vertex]:
-        raise NotImplementedError
+    def _crossover_partially_matched(self, specimen_1: t.List[Vertex], specimen_2: t.List[Vertex]) -> t.List[t.List[Vertex]]:
+        random_ints: t.List[int] = random.sample(range(0, self.instance.dimension), 2)
+        random_ints.sort()
+
+        specimen_1_part: t.List[Vertex] = specimen_1[random_ints[0]:random_ints[1]]
+        specimen_2_part: t.List[Vertex] = specimen_2[random_ints[0]:random_ints[1]]
+        exchange_matrix = np.zeros((2, len(specimen_1_part)), dtype=Vertex)
+        exchange_matrix[0], exchange_matrix[1] = specimen_2_part, specimen_1_part
+
+        child_1: t.List[Vertex] = [None] * self.instance.dimension
+        child_2: t.List[Vertex] = [None] * self.instance.dimension
+        child_1[random_ints[0]:random_ints[1]] = specimen_2_part
+        child_2[random_ints[0]:random_ints[1]] = specimen_1_part
+
+        mapping_list: t.List[t.List[Vertex]] = []
+        stop_mapping_condition = True
+        mapped_vertex: Vertex = None
+        for i in range(len(specimen_1_part)):
+            mapped_vertex = specimen_2_part[i]
+            stop_mapping_condition = True
+            while stop_mapping_condition:
+                if mapped_vertex in specimen_2_part:
+                    index_list_to_append: int = None
+                    for sublist in mapping_list:
+                        if mapped_vertex in sublist:
+                            index_list_to_append = mapping_list.index(sublist)
+                            continue
+                    if index_list_to_append is not None:
+                        list_to_append: t.List[Vertex] = mapping_list[index_list_to_append]
+                    else:
+                        list_to_append: t.List[Vertex] = []
+                    if not list_to_append:
+                        list_to_add: t.List[Vertex] = [mapped_vertex, specimen_1_part[i]]
+                        mapping_list.append(list_to_add)
+                        mapped_vertex = specimen_1_part[i]
+                    else:
+                        mapped_vertex_index: int = specimen_2_part.index(mapped_vertex)
+                        if specimen_1_part[mapped_vertex_index] not in list_to_append:
+                            list_to_append.append(specimen_1_part[mapped_vertex_index])
+                            mapping_list[index_list_to_append] = list_to_append
+                            mapped_vertex = specimen_1_part[mapped_vertex_index]
+                        else:
+                            stop_mapping_condition = False
+                else:
+                    stop_mapping_condition = False
+        children: t.List[t.List[Vertex]] = [self._map_child(child_1, specimen_1, mapping_list),
+                                            self._map_child(child_2, specimen_2, mapping_list)]
+        return children
+
+    def _map_child(self, child, parent, mapping_list) -> t.List[Vertex]:
+        for i in range(self.instance.dimension):
+            if child[i] is None:
+                found_list = [list_value for list_value in mapping_list if parent[i] in list_value]
+                if found_list:
+                    found_list = found_list[0]
+                    if parent[i] == found_list[0]:
+                        child[i] = found_list[-1]
+                    else:
+                        child[i] = found_list[0][0]
+                else:
+                    child[i] = parent[i]
+        return child
 
     def _mutation_swap(self, to_mutate: t.List[Vertex]) -> t.List[Vertex]:
         random_ints: t.List[int] = random.sample(range(0, self.instance.dimension), 2)
